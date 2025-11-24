@@ -54,14 +54,63 @@ local plugins = {
 	-- -- -- -- -- -- --
 	-- -- 遅延起動 -- --
 	-- -- -- -- -- -- --
-	{ "cohama/lexima.vim", event = "InsertEnter" },
-	{ "Eandrju/cellular-automaton.nvim", cmd = "CellularAutomaton" }, -- "<leader>r",
 	{ "github/copilot.vim", build = ":Copilot setup", cmd = "Copilot" },
-	{ "mattn/vim-maketable", cmd = { "MakeTable", "UnmakeTable" } },
-	{ "skanehira/translate.vim", cmd = "Translate" },
-	{ "wakatime/vim-wakatime", event = "VeryLazy" },
 	{
-		"cohama/lexima.vim",
+		"dstein64/nvim-scrollview",
+		event = "VeryLazy",
+		init = function()
+			vim.g.scrollview_excluded_filetypes = { "nerdtree" }
+			vim.g.scrollview_current_only = true
+			vim.g.scrollview_winblend = 100 -- 透過
+			vim.g.scrollview_base = "buffer"
+			vim.g.scrollview_column = 176
+			vim.g.scrollview_signs_on_startup = { "all" }
+			vim.g.scrollview_diagnostics_severities = { vim.diagnostic.severity.ERROR }
+		end,
+	},
+	{
+		"mason-org/mason-lspconfig.nvim",
+		-- 依存先: mason-org/mason.nvim
+		dependencies = { "mason-org/mason.nvim", opts = {} },
+	},
+	{
+		"previm/previm",
+		ft = "markdown", -- key や cmd だとうまく動作しない
+		init = function()
+			vim.g.previm_open_cmd = "vivaldi.exe"
+			vim.g.previm_wsl_mode = "1"
+
+			--[[
+            -- previm/previm ファイル開く度に立ち上がるのが意外と不便だったので廃止
+            -- autocmd BufRead,BufNewFile *.{text,txt,md} vim.opt.filetype=markdown
+			autocmd({ "BufRead", "BufNewFile" }, {
+				once = true,
+				pattern = { "*.text", "*.txt", "*.md" },
+				command = ":PrevimOpen",
+			})
+            ]]
+		end,
+	},
+	{
+		"tpope/vim-commentary",
+		keys = { "gcc", "gc", "gcap" },
+		init = function()
+			-- tpope/vim-commentary が Typst でも動作するように設定
+			autocmd("FileType", {
+				once = true,
+				pattern = "typst",
+				command = "",
+				vim.opt_local.commentstring:append("// %s"),
+			})
+		end,
+	},
+}
+
+require("lazy").setup(plugins, opts)
+
+local no_used = {
+	{
+		"cohama/lexima.vim", -- 括弧閉じるやつ、逆効果な場面もあるから無効化してみる
 		event = "InsertEnter",
 		config = function()
 			-- （）の設定
@@ -99,26 +148,43 @@ local plugins = {
 		end,
 	},
 	{
-		"dstein64/nvim-scrollview",
-		event = "VeryLazy",
+		"Eandrju/cellular-automaton.nvim", -- 完全にネタプラグインだから
+		cmd = "CellularAutomaton",
+		-- "<leader>r",
+	},
+	{
+		"chomosuke/typst-preview.nvim", -- masonの方で入れてるLSPで十分っぽい
+		ft = "typst",
 		init = function()
-			vim.g.scrollview_excluded_filetypes = { "nerdtree" }
-			vim.g.scrollview_current_only = true
-			vim.g.scrollview_winblend = 100 -- 透過
-			vim.g.scrollview_base = "buffer"
-			vim.g.scrollview_column = 176
-			vim.g.scrollview_signs_on_startup = { "all" }
-			vim.g.scrollview_diagnostics_severities = { vim.diagnostic.severity.ERROR }
+			require("typst-preview").setup({
+				open_cmd = '"/mnt/c/Users/yorugo/AppData/Local/Vivaldi/Application/vivaldi.exe" %s',
+				-- open_cmd = '"/mnt/c/Program Files/Google/Chrome/Application/chrome.exe" %s',
+				-- follow_cursor = false,
+			})
 		end,
 	},
 	{
-		"mason-org/mason-lspconfig.nvim",
-		-- 依存先: mason-org/mason.nvim
-		dependencies = { "mason-org/mason.nvim", opts = {} },
+		"IogaMaster/neocord", -- 設定複雑だし、重いし、Discordそもそも起動しなくなった
+		event = "VeryLazy",
+		keys = { "<leader>d" },
+		init = function()
+			require("neocord").setup({
+				-- https://github.com/IogaMaster/neocord?tab=readme-ov-file#lua
+				-- 無効化はスペース２つ
+				editing_text = "Editing now",
+				file_explorer_text = "Browsing now",
+				reading_text = "Reading now",
+				workspace_text = "🦕💭",
+				line_number_text = "Line %s out of %s",
+			})
+		end,
 	},
 	{
-		--[[
-		"mfussenegger/nvim-lint",
+		"mattn/vim-maketable", -- markdown の表、まじで使わんねんな
+		cmd = { "MakeTable", "UnmakeTable" },
+	},
+	{
+		"mfussenegger/nvim-lint", -- 気づいたら使ってなかった
 		-- 以下のイベントで自動読み込み
 		event = { "BufReadPost", "BufWritePost" },
 		config = function()
@@ -139,7 +205,6 @@ local plugins = {
 				end,
 			})
 		end,
-        ]]
 	},
 	{
 		--[[
@@ -148,7 +213,7 @@ local plugins = {
 		導入２: https://konnyakmannan.com/archives/neovim_treesitter_setup_on_windows11/
         メモ: プラグインマネージャーは関係ない `:TSInstallInfo`
         ]]
-		"nvim-treesitter/nvim-treesitter",
+		"nvim-treesitter/nvim-treesitter", -- treesitter なくてもハイライト効くし、重いし
 		event = "VeryLazy",
 		build = ":TSUpdate",
 		config = function()
@@ -192,79 +257,14 @@ local plugins = {
 		end,
 	},
 	{
-		"previm/previm",
-		ft = "markdown", -- key や cmd だとうまく動作しない
-		init = function()
-			vim.g.previm_open_cmd = "vivaldi.exe"
-			vim.g.previm_wsl_mode = "1"
-
-			--[[
-            -- previm/previm ファイル開く度に立ち上がるのが意外と不便だったので廃止
-            -- autocmd BufRead,BufNewFile *.{text,txt,md} vim.opt.filetype=markdown
-			autocmd({ "BufRead", "BufNewFile" }, {
-				once = true,
-				pattern = { "*.text", "*.txt", "*.md" },
-				command = ":PrevimOpen",
-			})
-            ]]
-		end,
+		"skanehira/translate.vim", -- 翻訳まじ使ったことない
+		cmd = "Translate",
 	},
 	{
-		"tpope/vim-commentary",
-		keys = { "gcc", "gc", "gcap" },
-		init = function()
-			-- tpope/vim-commentary が Typst でも動作するように設定
-			autocmd("FileType", {
-				once = true,
-				pattern = "typst",
-				command = "",
-				vim.opt_local.commentstring:append("// %s"),
-			})
-		end,
+		"tyru/open-browser.vim", -- previm/previm の依存，wsl と相性が悪いので採用なし
 	},
 	{
-		"vim-jp/vimdoc-ja",
-		keys = { "h", mode = "c" },
-		init = function()
-			-- 日本語化プラグインの設定
-			vim.opt.helplang = ja
-		end,
-	},
-}
-
-require("lazy").setup(plugins, opts)
-
-local no_used = {
-	{
-		"chomosuke/typst-preview.nvim",
-		ft = "typst",
-		init = function()
-			require("typst-preview").setup({
-				open_cmd = '"/mnt/c/Users/yorugo/AppData/Local/Vivaldi/Application/vivaldi.exe" %s',
-				-- open_cmd = '"/mnt/c/Program Files/Google/Chrome/Application/chrome.exe" %s',
-				-- follow_cursor = false,
-			})
-		end,
-	},
-	{
-		"IogaMaster/neocord",
-		event = "VeryLazy",
-		keys = { "<leader>d" },
-		init = function()
-			require("neocord").setup({
-				-- https://github.com/IogaMaster/neocord?tab=readme-ov-file#lua
-				-- 無効化はスペース２つ
-				editing_text = "Editing now",
-				file_explorer_text = "Browsing now",
-				reading_text = "Reading now",
-				workspace_text = "🦕💭",
-				line_number_text = "Line %s out of %s",
-			})
-		end,
-	},
-	{ "tyru/open-browser.vim" }, -- previm/previm の依存，wsl と相性が悪いので採用なし
-	{
-		"ray-x/go.nvim",
+		"ray-x/go.nvim", -- mason の方でいれてる LSP で十分っぽい
 		dependencies = {
 			-- optional packages, dependencies に記述は非推奨
 			-- "ray-x/guihua.lua",
@@ -279,6 +279,15 @@ local no_used = {
 		-- if you need to install/update all binaries
 		build = ':lua require("go.install").update_all_sync()',
 	},
+	{
+		"vim-jp/vimdoc-ja", -- ヘルプ使わんし、いいかなって
+		keys = { "h", mode = "c" },
+		init = function()
+			-- 日本語化プラグインの設定
+			vim.opt.helplang = ja
+		end,
+	},
+	{ "wakatime/vim-wakatime", event = "VeryLazy" },
 }
 
 -- 公式ドキュメント: https://lazy.folke.io/spec
