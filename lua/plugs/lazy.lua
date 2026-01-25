@@ -20,7 +20,7 @@ local plugins = {
 		build = function()
 			vim.cmd(":MasonUpdate")
 			vim.cmd(
-				":MasonInstall ast-grep black clang-format clangd gofumpt golangci-lint golangci-lint-langserver gopls intelephense prettierd python-lsp-server stylua templ tinymist ts-standard typescript-language-server typstyle xmlformatter"
+				":MasonInstall ast-grep bibtex-tidy black clang-format clangd gofumpt golangci-lint golangci-lint-langserver gopls intelephense php-cs-fixer prettierd python-lsp-server stylua templ tinymist ts-standard typescript-language-server typstyle xmlformatter"
 			)
 		end,
 	},

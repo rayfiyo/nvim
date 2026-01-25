@@ -21,6 +21,7 @@ require("formatter").setup({
 		c = { require("formatter.filetypes.c").clangformat },
 		go = { require("formatter.filetypes.go").gofumpt },
 		lua = { require("formatter.filetypes.lua").stylua },
+		php = { require("formatter.filetypes.php").php_cs_fixer },
 		python = { require("formatter.filetypes.python").black },
 		xml = { require("formatter.filetypes.xml").xmlformat },
 
