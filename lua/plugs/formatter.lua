@@ -38,6 +38,14 @@ require("formatter").setup({
 		yaml = { require("formatter.filetypes.yaml").prettierd },
 
 		-- 自作
+		bib = { -- bibtex-tidy
+			function()
+				return {
+					exe = "bibtex-tidy",
+					stdin = true,
+				}
+			end,
+		},
 		jsx = { -- prettierd
 			function()
 				return {
