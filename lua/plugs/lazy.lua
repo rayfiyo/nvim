@@ -20,7 +20,7 @@ local plugins = {
 		build = function()
 			vim.cmd(":MasonUpdate")
 			vim.cmd(
-				":MasonInstall ast-grep bibtex-tidy black clang-format clangd gofumpt golangci-lint golangci-lint-langserver gopls intelephense php-cs-fixer prettierd python-lsp-server stylua templ tinymist ts-standard typescript-language-server typstyle xmlformatter"
+				":MasonInstall ast-grep bibtex-tidy black clang-format clangd gofumpt golangci-lint gopls intelephense php-cs-fixer phpcs prettierd python-lsp-server stylua templ tinymist ts-standard typescript-language-server typstyle xmlformatter"
 			)
 		end,
 	},
@@ -72,6 +72,30 @@ local plugins = {
 		"mason-org/mason-lspconfig.nvim",
 		-- 依存先: mason-org/mason.nvim
 		dependencies = { "mason-org/mason.nvim", opts = {} },
+	},
+	{
+		"mfussenegger/nvim-lint",
+		-- 以下のイベントで自動読み込み
+		event = { "BufReadPost", "BufWritePost" },
+		config = function()
+			local lint = require("lint")
+
+			-- ファイルタイプ別のリンターを定義
+			lint.linters_by_ft = {
+				php = { "phpcs" },
+				-- LSP と競合するので使わない
+				-- go = { "golangcilint" },
+				-- python = { "flake8" },
+				-- javascript = { "eslint_d" },
+			}
+
+			-- バッファを開いたとき／保存したときに自動で lint を実行
+			vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost" }, {
+				callback = function()
+					lint.try_lint()
+				end,
+			})
+		end,
 	},
 	{
 		"previm/previm",
@@ -182,29 +206,6 @@ local no_used = {
 	{
 		"mattn/vim-maketable", -- markdown の表、まじで使わんねんな
 		cmd = { "MakeTable", "UnmakeTable" },
-	},
-	{
-		"mfussenegger/nvim-lint", -- 気づいたら使ってなかった
-		-- 以下のイベントで自動読み込み
-		event = { "BufReadPost", "BufWritePost" },
-		config = function()
-			local lint = require("lint")
-
-			-- ファイルタイプ別のリンターを定義
-			-- LSP と競合するので使わない
-			lint.linters_by_ft = {
-				-- go = { "golangcilint" }, -- Go: golangci-lint
-				-- python = { "flake8" }, -- Python: flake8
-				-- javascript = { "eslint_d" }, -- JS: eslint_d
-			}
-
-			-- バッファを開いたとき／保存したときに自動で lint を実行
-			vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost" }, {
-				callback = function()
-					lint.try_lint()
-				end,
-			})
-		end,
 	},
 	{
 		--[[
