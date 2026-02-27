@@ -32,6 +32,7 @@ require("formatter").setup({
 		javascript = { require("formatter.filetypes.javascript").prettierd },
 		javascriptreact = { require("formatter.filetypes.javascriptreact").prettierd },
 		markdown = { require("formatter.filetypes.markdown").prettierd },
+		php = { require("formatter.filetypes.php").phpcbf },
 		typescript = { require("formatter.filetypes.typescript").prettierd },
 		typescriptreact = { require("formatter.filetypes.typescript").prettierd },
 		vue = { require("formatter.filetypes.vue").prettierd },
