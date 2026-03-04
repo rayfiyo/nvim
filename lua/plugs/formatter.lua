@@ -35,6 +35,7 @@ require("formatter").setup({
 		lua = { require("formatter.filetypes.lua").stylua },
 		php = { require("formatter.filetypes.php").phpcbf },
 		python = { require("formatter.filetypes.python").black },
+        sql = { require("formatter.filetypes.sql").pgformat },
 		xml = { require("formatter.filetypes.xml").xmlformat },
 
 		-- 自作
