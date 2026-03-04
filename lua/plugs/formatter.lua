@@ -35,6 +35,7 @@ require("formatter").setup({
 		lua = { require("formatter.filetypes.lua").stylua },
 		php = { require("formatter.filetypes.php").phpcbf },
 		python = { require("formatter.filetypes.python").black },
+		sql = { require("formatter.filetypes.sql").sqlfluff },
 		xml = { require("formatter.filetypes.xml").xmlformat },
 
 		-- 自作
@@ -51,15 +52,6 @@ require("formatter").setup({
 				return {
 					exe = "prettierd",
 					args = { util.escape_path(util.get_current_buffer_file_path()) },
-					stdin = true,
-				}
-			end,
-		},
-		sql = { -- sqlfmt
-			function()
-				return {
-					exe = "sqlfmt",
-					args = { "-" },
 					stdin = true,
 				}
 			end,
