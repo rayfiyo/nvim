@@ -16,14 +16,6 @@ require("formatter").setup({
 	-- Mason で インストールして，こちらでファイルタイプと紐づけ
 	-- https://github.com/mhartington/formatter.nvim/tree/master/lua/formatter/filetypes
 	filetype = {
-
-		-- prettierd 以外
-		c = { require("formatter.filetypes.c").clangformat },
-		go = { require("formatter.filetypes.go").gofumpt },
-		lua = { require("formatter.filetypes.lua").stylua },
-		python = { require("formatter.filetypes.python").black },
-		xml = { require("formatter.filetypes.xml").xmlformat },
-
 		-- prettierd 使う
 		css = { require("formatter.filetypes.css").prettierd },
 		graphql = { require("formatter.filetypes.graphql").prettierd },
@@ -32,11 +24,18 @@ require("formatter").setup({
 		javascript = { require("formatter.filetypes.javascript").prettierd },
 		javascriptreact = { require("formatter.filetypes.javascriptreact").prettierd },
 		markdown = { require("formatter.filetypes.markdown").prettierd },
-		php = { require("formatter.filetypes.php").phpcbf },
 		typescript = { require("formatter.filetypes.typescript").prettierd },
 		typescriptreact = { require("formatter.filetypes.typescript").prettierd },
 		vue = { require("formatter.filetypes.vue").prettierd },
 		yaml = { require("formatter.filetypes.yaml").prettierd },
+
+		-- prettierd 以外
+		c = { require("formatter.filetypes.c").clangformat },
+		go = { require("formatter.filetypes.go").gofumpt },
+		lua = { require("formatter.filetypes.lua").stylua },
+		php = { require("formatter.filetypes.php").phpcbf },
+		python = { require("formatter.filetypes.python").black },
+		xml = { require("formatter.filetypes.xml").xmlformat },
 
 		-- 自作
 		bib = { -- bibtex-tidy
