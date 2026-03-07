@@ -27,7 +27,6 @@ require("formatter").setup({
 		typescript = { require("formatter.filetypes.typescript").prettierd },
 		typescriptreact = { require("formatter.filetypes.typescript").prettierd },
 		vue = { require("formatter.filetypes.vue").prettierd },
-		yaml = { require("formatter.filetypes.yaml").prettierd },
 
 		-- prettierd 以外
 		c = { require("formatter.filetypes.c").clangformat },
@@ -37,6 +36,7 @@ require("formatter").setup({
 		python = { require("formatter.filetypes.python").black },
 		sql = { require("formatter.filetypes.sql").sqlfluff },
 		xml = { require("formatter.filetypes.xml").xmlformat },
+		yaml = { require("formatter.filetypes.yaml").yamlfmt },
 
 		-- 自作
 		bib = { -- bibtex-tidy
