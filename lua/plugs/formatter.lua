@@ -35,6 +35,7 @@ require("formatter").setup({
 		php = { require("formatter.filetypes.php").phpcbf },
 		python = { require("formatter.filetypes.python").black },
 		sql = { require("formatter.filetypes.sql").sqlfluff },
+		toml = { require("formatter.filetypes.toml").tombi },
 		xml = { require("formatter.filetypes.xml").xmlformat },
 		yaml = { require("formatter.filetypes.yaml").yamlfmt },
 

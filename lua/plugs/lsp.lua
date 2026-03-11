@@ -10,6 +10,7 @@ vim.lsp.enable({
 	"intelephense",
 	"pylsp",
 	"templ",
+    "tombi",
 	"ts_ls",
 	"tinymist",
 })
