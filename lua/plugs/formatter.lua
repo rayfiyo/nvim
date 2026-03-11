@@ -1,6 +1,6 @@
 --[[
 https://github.com/mhartington/formatter.nvim#configure
-~/.local/share/nvim/lazy/formatter.nvim/lua/formatter/
+~/.local/share/nvim/lazy/formatter.nvim/lua/formatter/filetypes/
 ]]
 
 -- 設定（configurations）生成ユーティリティ
@@ -44,6 +44,7 @@ require("formatter").setup({
 			function()
 				return {
 					exe = "bibtex-tidy",
+					args = { "-" },
 					stdin = true,
 				}
 			end,
@@ -66,10 +67,20 @@ require("formatter").setup({
 				}
 			end,
 		},
+		tombi = {
+			function()
+				return {
+					exe = "tombi",
+					args = { "format", "-" },
+					stdin = true,
+				}
+			end,
+		},
 		typst = { -- typstyle
 			function()
 				return {
 					exe = "typstyle",
+					args = { "-" },
 					stdin = true,
 				}
 			end,
