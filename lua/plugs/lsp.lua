@@ -1,6 +1,8 @@
--- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
--- ~/.local/share/nvim/lazy/nvim-lspconfig/lua/lspconfig/configs
--- フォーマッタは mhartington/formatter.nvim を使用（LSP不使用）
+--[[
+    https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
+    ~/.local/share/nvim/lazy/nvim-lspconfig/lua/lspconfig/configs
+    フォーマッタは mhartington/formatter.nvim を使用（LSP不使用）
+]]
 
 vim.lsp.enable({
 	"ast_grep", -- プロジェクトルートに sgconfig.yml 必須
@@ -8,9 +10,10 @@ vim.lsp.enable({
 	"golangci_lint_ls",
 	"gopls",
 	"intelephense",
+	"lemminx",
 	"pylsp",
 	"templ",
-    "tombi",
+	"tombi",
 	"ts_ls",
 	"tinymist",
 })
@@ -44,6 +47,18 @@ config("intelephense", {
 					vim.loop.os_homedir() -- 改行
 						.. "/.config/composer/vendor/php-stubs/wordpress-stubs",
 				},
+			},
+		},
+	},
+})
+
+config("lemminx", {
+	settings = {
+		xml = {
+			validation = {
+				-- no grammar の診断を無視するが、LSP の診断自体は有効化のまま
+				enabled = true,
+				noGrammar = "ignore",
 			},
 		},
 	},
