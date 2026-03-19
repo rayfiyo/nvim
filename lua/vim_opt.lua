@@ -32,7 +32,7 @@ local opt = {
 	splitbelow = true, -- 水平分割の新規ウィンドウを現在の下にする (true)
 	splitright = false, -- 垂直分割の新規ウィンドウを現在の左にする (false)
 
-    shell = "/bin/bash",
+	shell = "/bin/bash",
 }
 
 for i, v in pairs(opt) do
@@ -44,5 +44,13 @@ vim.api.nvim_create_autocmd("FileType", {
 	pattern = { "c", "typst", "markdown" },
 	callback = function()
 		vim.opt.shiftwidth = 2
+	end,
+})
+
+-- 一部のファイルで、タブ押下時はタブにする設定
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = { "go", "php" },
+	callback = function()
+		vim.opt.expandtab = false
 	end,
 })

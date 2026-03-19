@@ -19,6 +19,7 @@ vim.lsp.enable({
 })
 
 local config = vim.lsp.config
+-- local intelephense_stubs は後述
 
 config("gopls", {
 	settings = {
@@ -29,24 +30,6 @@ config("gopls", {
 				printf = false, -- go vet の printf 系を止める
 				shadow = true, -- 影変数
 				unusedparams = true, -- 未使用パラメータ
-			},
-		},
-	},
-})
-
-config("intelephense", {
-	init_options = {
-		storagePath = vim.loop.os_homedir() .. "/.cache/intelephense",
-		globalStoragePath = vim.loop.os_homedir() .. "/.cache/intelephense",
-	},
-	settings = {
-		intelephense = {
-			environment = {
-				stubs = { "wordpress" },
-				includePaths = {
-					vim.loop.os_homedir() -- 改行
-						.. "/.config/composer/vendor/php-stubs/wordpress-stubs",
-				},
 			},
 		},
 	},
@@ -81,6 +64,96 @@ config("tinymist", {
 		formatterMode = "typstyle",
 		semanticTokens = "disable",
 		fontPaths = "/usr/share/fonts/",
+	},
+})
+
+-- https://github.com/bmewburn/vscode-intelephense/blob/0464c210540a3a2143b606e9ed04f2e06004c0cf/package.json#L163
+local intelephense_stubs = {
+	-- デフォルト
+	"apache",
+	"bcmath",
+	"bz2",
+	"calendar",
+	"com_dotnet",
+	"Core",
+	"ctype",
+	"curl",
+	"date",
+	"dba",
+	"dom",
+	"enchant",
+	"exif",
+	"FFI",
+	"fileinfo",
+	"filter",
+	"fpm",
+	"ftp",
+	"gd",
+	"gettext",
+	"gmp",
+	"hash",
+	"iconv",
+	"imap",
+	"intl",
+	"json",
+	"ldap",
+	"libxml",
+	"mbstring",
+	"meta",
+	"mysqli",
+	"oci8",
+	"odbc",
+	"openssl",
+	"pcntl",
+	"pcre",
+	"PDO",
+	"pgsql",
+	"Phar",
+	"posix",
+	"pspell",
+	"random",
+	"readline",
+	"Reflection",
+	"session",
+	"shmop",
+	"SimpleXML",
+	"snmp",
+	"soap",
+	"sockets",
+	"sodium",
+	"SPL",
+	"sqlite3",
+	"standard",
+	"superglobals",
+	"sysvmsg",
+	"sysvsem",
+	"sysvshm",
+	"tidy",
+	"tokenizer",
+	"uri",
+	"xml",
+	"xmlreader",
+	"xmlrpc",
+	"xmlwriter",
+	"xsl",
+	"Zend OPcache",
+	"zip",
+	"zlib",
+	-- 追加
+	"wordpress",
+}
+
+config("intelephense", {
+	init_options = {
+		storagePath = vim.loop.os_homedir() .. "/.cache/intelephense",
+		globalStoragePath = vim.loop.os_homedir() .. "/.cache/intelephense",
+	},
+	settings = {
+		intelephense = {
+			phpVersion = "8.3.27",
+			-- local intelephense_stubs は後述
+			stubs = intelephense_stubs,
+		},
 	},
 })
 
