@@ -6,6 +6,22 @@ https://github.com/mhartington/formatter.nvim#configure
 -- 設定（configurations）生成ユーティリティ
 local util = require("formatter.util")
 
+-- php のフォーマッタで、vendor/bin/phpcbf が実行可能ならその設定を利用する
+-- なければ formatter.nvim 標準の設定 （グローバルな phpcbf）を利用
+local php_formatter
+if vim.fn.executable("vendor/bin/phpcbf") == 1 then
+	php_formatter = function()
+		return {
+			exe = "vendor/bin/phpcbf",
+			args = { "-q" },
+			stdin = true,
+			ignore_exitcode = true,
+		}
+	end
+else
+	php_formatter = require("formatter.filetypes.php").phpcbf
+end
+
 -- Format, FormatWrite, FormatLock, FormatWriteLock のコマンドを提供
 require("formatter").setup({
 	-- ログの設定
@@ -32,7 +48,6 @@ require("formatter").setup({
 		c = { require("formatter.filetypes.c").clangformat },
 		go = { require("formatter.filetypes.go").gofumpt },
 		lua = { require("formatter.filetypes.lua").stylua },
-		php = { require("formatter.filetypes.php").phpcbf },
 		python = { require("formatter.filetypes.python").black },
 		sql = { require("formatter.filetypes.sql").sqlfluff },
 		yaml = { require("formatter.filetypes.yaml").yamlfmt },
@@ -55,6 +70,9 @@ require("formatter").setup({
 					stdin = true,
 				}
 			end,
+		},
+		php = { -- ローカルの phpcbf か、グローバルの phpcbf か
+			php_formatter,
 		},
 		svg = { -- xmlformat
 			function()
