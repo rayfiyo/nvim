@@ -35,7 +35,6 @@ require("formatter").setup({
 		-- prettierd 使う
 		css = { require("formatter.filetypes.css").prettierd },
 		graphql = { require("formatter.filetypes.graphql").prettierd },
-		html = { require("formatter.filetypes.html").prettierd },
 		json = { require("formatter.filetypes.json").prettierd },
 		javascript = { require("formatter.filetypes.javascript").prettierd },
 		javascriptreact = { require("formatter.filetypes.javascriptreact").prettierd },
@@ -47,6 +46,7 @@ require("formatter").setup({
 		-- prettierd 以外
 		c = { require("formatter.filetypes.c").clangformat },
 		go = { require("formatter.filetypes.go").gofumpt },
+		html = { require("formatter.filetypes.html").ast_grep },
 		lua = { require("formatter.filetypes.lua").stylua },
 		python = { require("formatter.filetypes.python").black },
 		sql = { require("formatter.filetypes.sql").sqlfluff },
@@ -87,7 +87,6 @@ require("formatter").setup({
 			function()
 				return {
 					exe = "typstyle",
-					args = { "-" },
 					stdin = true,
 				}
 			end,
