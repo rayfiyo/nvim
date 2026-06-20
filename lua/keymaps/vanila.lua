@@ -15,17 +15,9 @@ local map = vim.keymap.set
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- マッピング
+-- 通常マッピング
 map("n", "<ESC><ESC>", "<cmd>noh<CR>") -- Escキー をタブルクリックで、ハイライト削除
-map("n", ":wq！", ":wq!") -- <cmd>wq！用
-map("n", ":q！", ":q!") -- <cmd>q！用
-map("n", "っd", "dd") -- 全角・半角間違い用
-map("n", "っy", "yy") -- 全角・半角間違い用
-map("n", "うう", "uu") -- 全角・半角間違い用
-map("n", "い", "i") -- 全角・半角間違い用
-map("n", "あ", "a") -- 全角・半角間違い用
-map("n", "お", "o") -- 全角・半角間違い用
-map({ "n", "i" }, "<F2>", "<Esc>:w<CR>:!xsel -bi < %<CR>")
+map({ "n", "i" }, "<F2>", "<Esc>:w<CR>:!cat % | iconv -t UTF-16LE | /mnt/c/Windows/System32/clip.exe<CR>")
 map({ "n", "i" }, "<F6>", "<Esc>:w<CR>:!go test %<CR>")
 map({ "n", "i" }, "<F5>", function()
 	-- 現在のファイルタイプ: vim.bo.filetype
@@ -43,14 +35,32 @@ map({ "n", "i" }, "<F5>", function()
 		vim.cmd("!TYPST_FONT_PATHS=/usr/share/fonts/ typst compile %")
 	end
 end, { silent = true })
+
 map({ "i" }, "<C-b>", function() -- Typst で青字のショートカット
 	if vim.bo.filetype == "typst" then
 		return "**<b><Left><Left><Left><Left>"
 	end
 end, { expr = true, silent = true }) -- expr で返り値を入力
+
 -- map("i", "{", "{}<ESC>i") -- 閉じ｛括弧の入力
 -- map("i", "{<Enter>", "{}<ESC>i<CR><ESC><S-o>") -- 閉じ（括弧の入力
 -- map("i", "()", "()<ESC>i") -- 閉じ（括弧の入力
 -- map("i", "()<Enter>", "<ESC>i<CR><ESC><S-o>") -- 閉じ（括弧の入力
+
+-- 全角・半角間違い用
+map("n", "：ｑ！", ":q!")
+map("n", "：ｗ", ":w")
+map("n", "：ｗｑ", ":wq")
+map("n", "：ｗｑ！", ":wq!")
+map("n", "ｈ", "h")
+map("n", "ｊ", "j")
+map("n", "ｋ", "k")
+map("n", "ｌ", "l")
+map("n", "ｄｄ", "dd")
+map("n", "ｙｙ", "yy")
+map("n", "うう", "uu")
+map("n", "い", "i")
+map("n", "あ", "a")
+map("n", "お", "o")
 
 -- タブのスペース数は vim_opt
